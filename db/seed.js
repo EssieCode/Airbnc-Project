@@ -7,6 +7,7 @@ async function seed(property_types, users, properties) {
     await db.query(`DROP TABLE IF EXISTS properties;`);
     await db.query(`DROP TABLE IF EXISTS users;`);
     await db.query(`DROP TABLE IF EXISTS property_types;`);
+    await db.query(`DROP TABLE IF EXISTS reviews;`);
        
 
     //create properties table
@@ -37,6 +38,16 @@ async function seed(property_types, users, properties) {
         price_per_night DECIMAL NOT NULL,
         description TEXT
         );`);
+
+    //create reviews table
+    await db.query(`CREATE TABLE reviews(
+        review_id SERIAL PRIMARY KEY,
+        property_id INT NOT NULL REFERENCES properties(property_id),
+        guest_id INT NOT NULL REFERENCES users(user_id),
+        rating INT NOT NULL,
+        comment TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`);
+
 
     //format the data from json
     const formatedPropertyTypeData =  property_types.map(({ property_type, description }) => [

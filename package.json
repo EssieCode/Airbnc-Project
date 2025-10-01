@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "seed": "node ./seed.run.js"
+    "seed": "node ./db/seed.run.js",
+    "create_db": "psql -f airbnc_test_01"
   },
   "repository": {
     "type": "git",

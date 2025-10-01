@@ -1,23 +1,16 @@
 # AirBNC
-Create a database with command CREATE DATABASE airbnc_test;
-Check it has been created with \l command and add tables inside database.
-Connect with the psql database: import the ps module, create an instance of Pool and confirm the database name.
-Send a query to the psql database to retrieve all columns from properties table.
-Use a promise to handle the success or errors during the query.
 
-const { Pool } = require ("pg");
+## Project setup
 
-require("dotenv").config();
+Run `npm install` in the root of repo to install the dependencies required.
 
-const pool = new Pool({
-    database: "airbnc_test_01",
-});
+Run `npm run create_db` to create the database.
 
-pool
-    .query("SELECT * FROM properties")
-    .then(({ rows }) => {
-        console.log(rows);
-    })
-    .catch(err => {
-        console.log(err);
-    })
+Create a `.env` file at the root level with the following content:
+```
+PGDATABASE=airbnc_test_01
+```
+Run `npm run seed`, it creates tables and seeds data into the database
+
+
+

@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS airbnb_test_01;
+CREATE DATABASE airbnc_test_01;
