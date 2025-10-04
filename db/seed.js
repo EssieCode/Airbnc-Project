@@ -1,14 +1,14 @@
 const db = require("./connection");
 const format = require("pg-format");
 const dropTables = require("./drops");
+const createUserRef = require("./utils")
 
-async function seed(property_types, users, properties) {
+async function seed(property_types, users, properties, reviews) {
     
     //drop existing table
     await dropTables();
        
-
-    //create properties table
+    //create property_types table
     await db.query(`CREATE TABLE property_types (
         property_type VARCHAR(50) NOT NULL PRIMARY KEY,
         description TEXT NOT NULL
@@ -30,10 +30,10 @@ async function seed(property_types, users, properties) {
     await db.query(`CREATE TABLE properties(
         property_id SERIAL PRIMARY KEY,
         host_id INT NOT NULL REFERENCES users(user_id),
-        name VARCHAR(50) NOT NULL,
+        host_name VARCHAR(50) NOT NULL,
         location VARCHAR(50) NOT NULL,
         property_type VARCHAR(50) NOT NULL REFERENCES property_types(property_type),
-        price_per_night DECIMAL NOT NULL,
+        price_per_night DECIMAL NOT NULL CHECK (price_per_night > 0),
         description TEXT
         );`);
 
@@ -47,29 +47,44 @@ async function seed(property_types, users, properties) {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`);
 
 
-    //format the data from json
+    //insert data property_types
     const formatedPropertyTypeData =  property_types.map(({ property_type, description }) => [
                 property_type, description])
+    
     await db.query(
         format(
-            `INSERT INTO property_types (property_type, description) VALUES %L`, formatedPropertyTypeData             
+            `INSERT INTO property_types (property_type, description) VALUES %L`, 
+            formatedPropertyTypeData             
         ));
-
-       await db.query(
+    //insert data users
+    const { rows: insertedUsers } = await db.query(
         format(
-            `INSERT INTO users ( first_name, surname, email, phone_number, is_host, avatar, created_at) VALUES %L RETURNING *`,
+            `INSERT INTO users (
+             first_name, surname, email, phone_number, is_host, avatar, created_at) VALUES %L RETURNING *`,
              users.map(({ first_name, surname, email, phone_number, is_host, avatar, created_at }) => [
                 first_name, surname, email, phone_number, is_host, avatar, created_at])
         ));
-        //console.log(insertedUsers);
-        
-     await db.query(
+        const userRef = createUserRef(insertedUsers);
+
+        console.log(userRef);
+    
+    //insert data properties
+    const formatedPropertiesData =  properties.map(( { host_id, host_name, location, property_type, price_per_night, description}) => [
+                host_id, 
+                host_name, 
+                location, 
+                property_type, 
+                price_per_night, 
+                description
+    ])
+
+    await db.query(
         format(
-            `INSERT INTO properties (host_id, name, location, property_type, price_per_night, description) VALUES %L`,
-             properties.map(({ name, location, property_type, price_per_night, description }) => [
-                user_id, name, location, property_type, price_per_night, description])
+            `INSERT INTO properties (host_id, host_name, location, property_type, price_per_night, description) VALUES %L`,
+             formatedPropertiesData
         ));
     
+    //insert data reviews
     await db.query(
         format(
             `INSERT INTO reviews (property_id, guest_id, rating, comment, created_at) VALUES %L`,
@@ -77,7 +92,9 @@ async function seed(property_types, users, properties) {
                 guest_id, rating, comment, created_at])
         ));
         
-    //console.log("success!")
+        const {rows } = await db.query("SELECT * FROM users;");
+    
+        console.log(rows);
 
 
 }
