@@ -1,7 +1,7 @@
 const db = require("./connection");
 const format = require("pg-format");
 const dropTables = require("./drops");
-const createUserRef = require("./utils")
+const { createUserRef, getHostName, getHostId } = require("./utils")
 
 async function seed(property_types, users, properties, reviews) {
     
@@ -29,7 +29,7 @@ async function seed(property_types, users, properties, reviews) {
     //create properties table
     await db.query(`CREATE TABLE properties(
         property_id SERIAL PRIMARY KEY,
-        host_id INT NOT NULL REFERENCES users(user_id),
+        host_id INT REFERENCES users(user_id),
         host_name VARCHAR(50) NOT NULL,
         location VARCHAR(50) NOT NULL,
         property_type VARCHAR(50) NOT NULL REFERENCES property_types(property_type),
@@ -40,8 +40,8 @@ async function seed(property_types, users, properties, reviews) {
     //create reviews table
     await db.query(`CREATE TABLE reviews(
         review_id SERIAL PRIMARY KEY,
-        property_id INT NOT NULL REFERENCES properties(property_id),
-        guest_id INT NOT NULL REFERENCES users(user_id),
+        property_id INT  REFERENCES properties(property_id),
+        guest_id INT REFERENCES users(user_id),
         rating INT NOT NULL,
         comment TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`);
@@ -66,7 +66,7 @@ async function seed(property_types, users, properties, reviews) {
         ));
         const userRef = createUserRef(insertedUsers);
 
-        console.log(userRef);
+        console.log(userRef);   
     
     //insert data properties
     const formatedPropertiesData =  properties.map(( { host_id, host_name, location, property_type, price_per_night, description}) => [
@@ -83,18 +83,22 @@ async function seed(property_types, users, properties, reviews) {
             `INSERT INTO properties (host_id, host_name, location, property_type, price_per_night, description) VALUES %L`,
              formatedPropertiesData
         ));
+
+        const propertiesRef = getHostName(insertedUsers);
     
     //insert data reviews
+    const formatedReviewsData = reviews.map(( { property_id, guest_id, rating, comment, created_at})  => [
+                property_id, guest_id, rating, comment, created_at]);
+
     await db.query(
         format(
             `INSERT INTO reviews (property_id, guest_id, rating, comment, created_at) VALUES %L`,
-             reviews.map(({ guest_id, rating, comment, created_at }) => [
-                guest_id, rating, comment, created_at])
+             formatedReviewsData
         ));
         
-        const {rows } = await db.query("SELECT * FROM users;");
+        //const {rows } = await db.query("SELECT * FROM users;");
     
-        console.log(rows);
+        //console.log(rows);
 
 
 }

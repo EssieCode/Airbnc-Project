@@ -1,6 +1,6 @@
-const createUserRef = require("../db/utils.js");
+const { createUserRef, getHostName, getHostId }  = require("../db/utils.js");
 
-describe("convert data from json in data for psql", () => {
+describe("Users: convert data from json in data for psql", () => {
     test("returns an empty object when passed an empty array", () => {
         expect(createUserRef([])).toEqual({});
         });
@@ -35,3 +35,45 @@ describe("convert data from json in data for psql", () => {
     });
 
 });
+
+describe("Properties: manipulate Host_name from users table", () => {
+    test("returns an empty string when passed an empty array", () => {
+        expect(getHostName([])).toEqual("");
+    });
+    test("takes first_name and surname and concatenates both", () => {
+        const host_names = [
+            { first_name: "Alice", surname: "Johnson" },
+            { first_name: "Bob", surname: "Smith" },
+        ];
+
+        expect(getHostName(host_names)).toEqual([
+            "Alice Johnson",
+            "Bob Smith"
+        ]);
+    });
+    test("if first_name or surname is missing, return the present", () => {
+        const host_names = [
+            { first_name: "", surname: "Johnson"},
+            { first_name: "Bob", surname: ""},
+        ];
+        expect(getHostName(host_names)).toEqual(["Johnson", "Bob"]);
+    });
+    test("if first_name and surname is missing, return Unknown Host", () => {
+        const host_names = [
+            { first_name: "", surname: ""},
+        ];
+        expect(getHostName(host_names)).toEqual(["Unknown Host"]);
+    })
+});
+
+describe.only("assigns user_id to host_id", () => {
+    test("takes a users_id and asigns it to a host_id", () => {
+
+        const testIs = [
+            ["Alice Johnson", 1],
+            ["Bob Smith", 2],
+            ["Emma Davies", 3]
+        ]
+        expect(getHostId(user_name)).toBe()
+    });
+})
