@@ -15,6 +15,7 @@ function createPropertyRef(properties) {
     properties.forEach((property) => {
         ref[property.name] = property.property_id;
     });
+    return ref;
 }
 
 module.exports = { createUserRef, createPropertyRef };

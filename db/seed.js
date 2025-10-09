@@ -65,8 +65,7 @@ async function seed(property_types, users, properties, reviews) {
                 first_name, surname, email, phone_number, is_host, avatar, created_at])
         ));
         const userRef = createUserRef(insertedUsers);
-
-        console.log(userRef);   
+ 
     
     //insert data properties
     const formatedPropertiesData =  properties.map(
@@ -86,7 +85,7 @@ async function seed(property_types, users, properties, reviews) {
         ));
 
         const propertiesRef = createPropertyRef(insertedProperties);
-        console.log(propertiesRef);
+        console.log('propertiesRef:', propertiesRef);
     
     //insert data reviews
     const formatedReviewsData = reviews.map(
