@@ -1,22 +1,20 @@
-const express = require("express");
-const db = require("./db/connection");
+const express = require("express")
+const { getProperties, getPropertyById } = require("./controllers/properties");
+const { getUsers } = require("./controllers/users");
+const { getReviews, postReview } = require("./controllers/reviews");
 
 const app = express();
 
-app.get("/api/properties", async (req, res, next) => {
-    const { rows: properties } = await db.query("SELECT * FROM properties;");
+app.use(express.json());
 
-    res.status(200).send ({ properties });
-});
+app.get("/api/properties", getProperties);
 
-app.get("/api/properties", async (req, res, next) => {
-    const { rows: properties } = await db.query(
-        "SELECT * FROM properties WHERE price_per_night > 30 && price_per_night < 200;"
-    );
+app.get("/api/properties/:id", getPropertyById);
 
-    res.status(200).send ({ properties });
-});
+app.get("/api/properties/:id/reviews", getReviews);
 
+app.get("/api/users/:id/", getUsers);
 
+app.post("/api/properties/:id/reviews", postReview);
 
 module.exports = app;
