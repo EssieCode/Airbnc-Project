@@ -1,13 +1,18 @@
-const db = require("./db/connection");
+const db = require("../db/connection");
 
 exports.fetchProperties = async () => {
+    try {
     const { rows: properties } = await db.query(
         `SELECT property_id, property_name AS name, location, price_per_night, host_name
         FROM properties
         `);
 
     return properties;
-}
+        } catch(error) {
+            console.error("Error- no properties fetched", error);
+            throw new Error("Error")
+        }
+};
 
 exports.fetchPropertyById =  async () => {
 
