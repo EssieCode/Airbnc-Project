@@ -3,8 +3,8 @@ const db = require("../db/connection");
 exports.fetchProperties = async () => {
     try {
     const { rows: properties } = await db.query(
-        `SELECT property_id, property_name AS name, location, price_per_night, host_name
-        FROM properties
+        `SELECT property_id, name AS property_name, location, price_per_night, CONCAT(first_name, ' ', surname) AS host
+        FROM properties JOIN users ON host_id = user_id;
         `);
 
     return properties;

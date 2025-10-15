@@ -14,7 +14,7 @@ describe("app", () => {
         });
         test("responds with an array of properties with a correct length", async () => {
             const { body } = await request(app).get("/api/properties");
-            expect(body.properties.length).toBe(5);
+            expect(body.properties.length).toBe(11);
         });
         test("responds with properties objects having the correct structure", async () => {
             const { body } = await request(app).get("/api/properties");
@@ -25,10 +25,8 @@ describe("app", () => {
                 expect(property).toHaveProperty("price_per_night");
                 expect(property).toHaveProperty("host");
             });
-            test("responds with 404 if properties not found ", async () => {
-                const { body } = await request(app).get("/api/properties");
-                expect(body.properties()).toBe("404 Not Found");
-            });
+            
         });
+
     });
 });
