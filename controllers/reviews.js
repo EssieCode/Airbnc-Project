@@ -1,7 +1,7 @@
 const { fetchReviews, insertReview } = require("../models/reviews");
 
 exports.getReviews = async (req, res, next) => {
-    const propertyId = req.params.id;
+    //const propertyId = req.params.id;
 
     const reviews = await fetchReviews();
 

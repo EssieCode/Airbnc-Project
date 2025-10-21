@@ -6,13 +6,16 @@ exports.getProperties = async (req, res, next) => {
     const properties = await fetchProperties();
 
     if (!properties.length) {
-            return res.status(404).send({ message: "No properties found" });
+        return res.status(200).send({ properties: [] });
         }
+    if( req.path !== "/api/properties") {
+        return res.status(404).send({ msg: "404 not found" });
+    }
 
         return res.status(200).send({ properties });
 
     } catch (error) {
-    console.error("Error in fetching the properties:", error);
+    console.log("Error in fetching the properties:", error);
         return res.status(500).send({ message: "Server Error" });
     }
 };

@@ -2,6 +2,12 @@ const express = require("express")
 const { getProperties, getPropertyById } = require("./controllers/properties");
 const { getUsers } = require("./controllers/users");
 const { getReviews, postReview } = require("./controllers/reviews");
+const { 
+    handlePathNotFound, 
+    handleBadRequests, 
+    handleServerErrors, 
+    handleCustomsErrors,
+ } = require("./errors.js")
 
 const app = express();
 
@@ -16,5 +22,11 @@ app.get("/api/properties/:id/reviews", getReviews);
 app.get("/api/users/:id/", getUsers);
 
 app.post("/api/properties/:id/reviews", postReview);
+
+
+app.use(handlePathNotFound);
+app.use(handleBadRequests);
+app.use(handleServerErrors);
+app.use(handleCustomsErrors);
 
 module.exports = app;
