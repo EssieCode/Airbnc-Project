@@ -1,6 +1,6 @@
 const { createUserRef, getHostName, getHostId }  = require("../db/utils.js");
 
-describe("Users: convert data from json in data for psql", () => {
+describe.only("Users: convert data from json in data for psql", () => {
     test("returns an empty object when passed an empty array", () => {
         expect(createUserRef([])).toEqual({});
         });

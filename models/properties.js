@@ -13,9 +13,9 @@ exports.fetchProperties = async () => {
         }
 };
 
-exports.fetchPropertyById =  async () => {
+exports.fetchPropertyById =  async (property_id) => {
 
-    const { rows: [property_id] } = await db.query(
+    const { rows: [property] } = await db.query(
         `SELECT property_id, property_name, location, price_per_night, description, 
         host AS host_name, host_avatar AS avatar 
         FROM properties

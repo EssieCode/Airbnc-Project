@@ -3,8 +3,9 @@ const format = require("pg-format");
 const dropTables = require("./drops");
 const { createUserRef, createPropertyRef } = require("./utils")
 
+
 async function seed(property_types, users, properties, reviews) {
-    
+
     //drop existing table
     await dropTables();
        

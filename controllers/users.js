@@ -3,7 +3,7 @@ const { fetchUsers } = require("../models/users")
 exports.getUsers = async(req, res, next) => {
     const { id } = req.params;
 
-    const users = await fetchUsers();
+    const users = await fetchUsers(id);
 
     if (!user) {
             return res.status(404).send({ error: "User not found" });

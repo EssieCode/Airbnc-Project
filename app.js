@@ -19,9 +19,10 @@ app.get("/api/properties/:id", getPropertyById);
 
 app.get("/api/properties/:id/reviews", getReviews);
 
+app.post("/api/properties/:id/reviews", postReview);
+
 app.get("/api/users/:id/", getUsers);
 
-app.post("/api/properties/:id/reviews", postReview);
 
 
 app.use(handlePathNotFound);
