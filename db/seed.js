@@ -86,8 +86,7 @@ async function seed(property_types, users, properties, reviews) {
         ));
 
         const propertiesRef = createPropertyRef(insertedProperties);
-        console.log('propertiesRef:', propertiesRef);
-    
+ 
     //insert data reviews
     const formatedReviewsData = reviews.map(
         ({ property_name, guest_name, rating, comment, created_at })  => [
@@ -104,10 +103,6 @@ async function seed(property_types, users, properties, reviews) {
              formatedReviewsData
         ));
         
-        //const {rows } = await db.query("SELECT * FROM users;");
-    
-        //console.log(rows);
-
 
 }
 

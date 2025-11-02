@@ -8,5 +8,5 @@ exports.fetchUsers =  async (user_id) => {
         WHERE user_id = $1`,
         [user_id]
     );
-    return users;
+    return user;
 }

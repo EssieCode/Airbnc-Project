@@ -3,7 +3,6 @@ exports.handlePathNotFound = (req, res, next) => {
 };
 
 exports.handleBadRequests = (req, res, next) => {
-    console.log(err);
     const codes = ["23502", "22P02"];
 
     if(codes.includes(err.code)) {

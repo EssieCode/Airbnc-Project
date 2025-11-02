@@ -2,7 +2,7 @@ const { fetchProperties, fetchPropertyById } = require("../models/properties");
 
 exports.getProperties = async (req, res, next) => {
 
-    try {
+
     const properties = await fetchProperties();
 
     if (!properties.length) {
@@ -13,11 +13,6 @@ exports.getProperties = async (req, res, next) => {
     }
 
         return res.status(200).send({ properties });
-
-    } catch (error) {
-    console.log("Error in fetching the properties:", error);
-        return res.status(500).send({ message: "Server Error" });
-    }
 };
 
 
@@ -27,5 +22,10 @@ exports.getPropertyById = async (req, res, next) => {
     
     const property = await fetchPropertyById(id);
 
-    res.status(200).send({ property });
+    if( !property ) {
+        return res.status(400).send({ error: "Bad-request: Incorrect property_id" })
+    } else {
+        res.status(200).send({ property });
+    }
+
 };
