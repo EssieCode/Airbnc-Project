@@ -7,9 +7,9 @@ exports.fetchReviewsByPropertyId = async (property_id) => {
         comment, 
         rating, 
         created_at, 
-        CONCAT(first_name, ' ', surname)  AS guest_name,
-        FROM reviews
-        JOIN users ON reviews.guest_id = users.user_id
+        CONCAT(first_name, ' ', surname) AS guest_name,
+        FROM reviews,
+        JOIN users ON reviews.guest_id = users.user_id,
         WHERE property_id= $1`,
         [property_id]
     );
@@ -25,4 +25,14 @@ exports.insertReview = async (guest_id, rating, comment) => {
         [guest_id, rating, comment]
     );
     return review;
+}
+
+exports.deleteReviewbyId = async(review_id) => {
+    const { rows: review } = await db.query(
+        `DELETE FROM reviews 
+        WHERE review_id = $1
+        RETURNING *`,
+        [review_id]
+    );
+
 }

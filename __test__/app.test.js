@@ -55,7 +55,7 @@ describe("app", () => {
 
              expect(Object.keys(property)).toHaveLength(7);
         });
-        test("property object has a property_id, name, property_type, location, price_per_night, description, host_name", async () => {
+        test("property object has a property_id, name, location, price_per_night, description, host_name", async () => {
             const { 
                 body: { property }, 
              } = await request(app).get("/api/properties/1");
@@ -82,6 +82,7 @@ describe("app", () => {
                 expect(property).toHaveProperty("created_at","2024-04-12 14:45:00" );
                 expect(property).toHaveProperty("guest", "Bob Smith");
                 expect(property).toHaveProperty("avatar", "https://example.com/images/bob.jpg");
+            });
         });
         test("should have a property of average rating", async () => {
             const { body } = await request(app).get("api/properties/1/reviews").expect(200)
@@ -91,7 +92,7 @@ describe("app", () => {
             await request(app).get("api/properties/5555/reviews").expect(400)
             expect(response.body.msg).toBe("Bad-request: Incorrect property_id")
         });
-        });
+        
     });
     describe("POST/api/properties/{id}/reviews", () => {
         test("should respond with status 201", async () => {
@@ -119,5 +120,18 @@ describe("app", () => {
         })
 
     });
+    describe.only("DELETE /api/reviews/:id", () => {
+        test("should remove a review and return status 204", async () => {
+            await request(app)
+            .delete("/api/reviews/1")
+            .expect(204);
+        });
+        test("should return 404 if no valid review id", async () => {
+            const response = await request(app)
+                .delete("/api/reviews/9999")
+                .expect(404);
+                expect(response.body.error).toBe("Review not found");
+        });
 
-});
+    });
+    });
