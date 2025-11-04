@@ -6,10 +6,11 @@ exports.fetchReviewsByPropertyId = async (property_id) => {
         `SELECT review_id, 
         comment, 
         rating, 
-        created_at, 
-        CONCAT(first_name, ' ', surname) AS guest_name,
-        FROM reviews,
-        JOIN users ON reviews.guest_id = users.user_id,
+        reviews.created_at, 
+        CONCAT(first_name, ' ', surname) AS guest
+        avatar
+        FROM reviews
+        JOIN users ON reviews.guest_id = users.user_id
         WHERE property_id= $1`,
         [property_id]
     );

@@ -1,8 +1,8 @@
-exports.handlePathNotFound = (req, res, next) => {
+exports.handlePathNotFound = (err, req, res, next) => {
     res.status(404).send({msg:"Path not found."});
 };
 
-exports.handleBadRequests = (req, res, next) => {
+exports.handleBadRequests = (err, req, res, next) => {
     const codes = ["23502", "22P02"];
 
     if(codes.includes(err.code)) {
