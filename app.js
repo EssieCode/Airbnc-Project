@@ -1,12 +1,12 @@
 const express = require("express")
 const { getProperties, getPropertyById } = require("./controllers/properties");
 const { getUsers } = require("./controllers/users");
-const { getReviewsByPropertyId, postReview } = require("./controllers/reviews");
+const { getReviewsByPropertyId, postReviewByPropertyId } = require("./controllers/reviews");
 const { 
     handlePathNotFound, 
     handleBadRequests, 
-    handleServerErrors, 
     handleCustomsErrors,
+    handleServerErrors, 
  } = require("./errors.js")
 
 const app = express();
@@ -19,7 +19,9 @@ app.get("/api/properties/:id", getPropertyById);
 
 app.get("/api/properties/:id/reviews", getReviewsByPropertyId);
 
-app.post("/api/properties/:id/reviews", postReview);
+app.post("/api/properties/:id/reviews", postReviewByPropertyId);
+
+//app.delete("/api/properties/:id/reviews", deleteReviewByPropertyId);
 
 //app.get("/api/users/:id/", getUsers);
 
@@ -27,7 +29,7 @@ app.post("/api/properties/:id/reviews", postReview);
 
 app.use(handlePathNotFound);
 app.use(handleBadRequests);
-app.use(handleServerErrors);
 app.use(handleCustomsErrors);
+app.use(handleServerErrors);
 
 module.exports = app;

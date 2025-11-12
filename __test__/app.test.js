@@ -38,9 +38,9 @@ describe("app", () => {
             });
             
         });
-        test("404-path not found", async () => {
-            const { body } = await request(app).get("/invalid/path").expect(404);
-            expect(body.msg).toBe("Path not found.");
+        test("404- Not found", async () => {
+            const { body } = await request(app).get("/api/properties/9999").expect(404);
+            expect(body.msg).toBe("404 not found.");
         });
     });
     describe("GET/api/properties/{id}", () => {
@@ -67,17 +67,19 @@ describe("app", () => {
                 expect(property).toHaveProperty("description", "Description of Modern Apartment in City Center.");
                 expect(property).toHaveProperty("host_name", "Alice Johnson");
         });
-        test("400: Invalid property id", async () => {
+        test("400: Bad request", async () => {
             const response = await request(app)
-            .get("/api/properties/cat")
-            .expect(400);
-            expect(response.body.msg).toBe("Bad request.");
+                .get("/api/properties/cat")
+                .expect(400);
+                expect(response.body.msg).toBe("Bad request.");
         });
     });
     describe("GET/api/properties/{id}/reviews", () => {
         test("should respond with status 200 and the right properties", async () => {
-            const { body } = await request(app).get("/api/properties/1/reviews").expect(200);
-            body.reviews.forEach(property => {
+            const { body } = await request(app)
+            .get("/api/properties/1/reviews")
+            .expect(200);
+            body.reviews.forEach((review) => {
                 expect(review).toHaveProperty("review_id");
                 expect(review).toHaveProperty("comment");
                 expect(review).toHaveProperty("rating");
@@ -87,7 +89,7 @@ describe("app", () => {
             });
         });
         test("should return 400 bad request msg for incorrect property_id as input", async() => {
-            await request(app).get("/api/properties/cat/reviews").expect(400)
+            const response = await request(app).get("/api/properties/cat/reviews").expect(400)
             expect(response.body.msg).toBe("Bad request.")
         });
         
@@ -99,7 +101,10 @@ describe("app", () => {
              rating: 4,
              comment: "Comment about Modern Apartment in City Center"
             }
-            await request(app).post("/api/properties/1/reviews").send(postReview);
+            await request(app)
+            .post("/api/properties/3/reviews")
+            .send(postReview)
+            .expect(201);
         });
         test("should respond with newly inserted review with a fresh id", async () => {
             const postReview = {
@@ -109,15 +114,28 @@ describe("app", () => {
             }
 
             const { body } = await request(app)
-                .post("/api/properties/1/reviews")
+                .post("/api/properties/3/reviews")
                 .send(postReview)
                 .expect(201);
 
-            expect(body.review).toEqual({...postReview, review_id: 17})    
-        })
+            expect(body.review).toMatchObject(postReviewByPropertyId);
+            expect(body.review).toHaveProperty("review_id");  
+        });
+        test("should respond with 400 for missing fields", async () => {
+            const postReview = {
+                rating: 4
+            };
+
+            const { body } = await request(app)
+                .post("/api/properties/1/reviews")
+                .send(postReview)
+                .expect(400);
+
+            expect(body.msg).toBe("Bad request.");
+        });
 
     });
-    describe("DELETE/api/reviews/:id", () => {
+    describe("DELETE/api/reviews/{id}", () => {
         test("should remove a review and return status 204", async () => {
             await request(app)
             .delete("/api/reviews/1")
@@ -129,6 +147,5 @@ describe("app", () => {
                 .expect(404);
                 expect(response.body.error).toBe("Review not found");
         });
-
     });
     });

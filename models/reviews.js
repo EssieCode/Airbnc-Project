@@ -1,4 +1,5 @@
 const db = require("../db/connection");
+const { postReviewByPropertyId } = require("../controllers/reviews");
 
 exports.fetchReviewsByPropertyId = async (property_id) => {
     
@@ -7,27 +8,24 @@ exports.fetchReviewsByPropertyId = async (property_id) => {
         comment, 
         rating, 
         reviews.created_at, 
-        CONCAT(first_name, ' ', surname) AS guest
+        CONCAT(first_name, ' ', surname) AS guest,
         avatar
         FROM reviews
         JOIN users ON reviews.guest_id = users.user_id
-        WHERE property_id= $1`,
+        WHERE property_id = $1`,
         [property_id]
     );
     return reviews;
 };
-
-
-exports.insertReview = async (guest_id, rating, comment) => {
-    const { rows: review } = await db.query (
-        `INSERT INTO reviews (guest_id, rating, comment) 
-        VALUES ($1, $2, $3)
-        RETURNING *`,
-        [guest_id, rating, comment]
+exports.insertReview = async (property_id, guest_id, rating, comment) => {
+    const { rows } = await db.query (
+        `INSERT INTO reviews (property_id, guest_id, rating, comment) 
+        VALUES ($1, $2, $3, $4)
+        RETURNING review_id, property_id, guest_id, rating, comment, created_at;`,
+        [property_id, guest_id, rating, comment]
     );
-    return review;
-}
-
+    return rows[0];
+};
 exports.deleteReviewbyId = async(review_id) => {
     const { rows: review } = await db.query(
         `DELETE FROM reviews 
@@ -35,5 +33,6 @@ exports.deleteReviewbyId = async(review_id) => {
         RETURNING *`,
         [review_id]
     );
+    return review;
 
-}
+};

@@ -15,7 +15,7 @@ exports.fetchPropertyById =  async (property_id) => {
 
     const { rows: [property] } = await db.query(
         `SELECT property_id, name, location, price_per_night, description, 
-        CONCAT(first_name, ' ', surname) AS host, avatar
+        CONCAT(first_name, ' ', surname) AS host_name, avatar
         FROM properties
         JOIN users ON properties.host_id = users.user_id
         WHERE property_id= $1`,

@@ -8,8 +8,8 @@ exports.getProperties = async (req, res, next) => {
     if (!properties.length) {
         return res.status(200).send({ properties: [] });
         }
-    if( req.path !== "/api/properties") {
-        return res.status(404).send({ msg: "404 not found" });
+    if(req.path !== "/api/properties") {
+        return res.status(404).send({ msg: "404 not found." });
     }
 
         return res.status(200).send({ properties });
@@ -23,7 +23,7 @@ exports.getPropertyById = async (req, res, next) => {
     const property = await fetchPropertyById(id);
 
     if( !property ) {
-        return res.status(400).send({ error: "Bad-request: Incorrect property_id" })
+        return res.status(400).send({ error: "Bad request." })
     } else {
         res.status(200).send({ property });
     }
