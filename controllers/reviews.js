@@ -1,4 +1,4 @@
-const { fetchReviewsByPropertyId, insertReview, removeReviewById } = require("../models/reviews");
+const { fetchReviewsByPropertyId, insertReview, deleteReviewById } = require("../models/reviews");
 
 exports.getReviewsByPropertyId = async (req, res, next) => {
     const property_id = Number(req.params.id);
@@ -34,16 +34,13 @@ exports.postReviewByPropertyId = async (req, res, next) => {
 };
 
 exports.deleteReviewById = async (req, res, next) => {
-    const review_id = Number(req.params.id);
+    const { id } = req.params;
+    const rows = await deleteReviewById(id);
 
-    if (isNaN(review_id)) {
-        return res.status(400).send({ error: "Bad request." });
+    if(rows.length === 0) {
+        res.status(404).send({ msg: "Review not found." })
+    } else {
+        res.status(204).send();
     }
-
-    const deleted = await removeReviewById(review_id);
-
-    if (deleted.length === 0) {
-        return res.status(404).send({ error: "Review not found" });
-    }
-    res.status(204).send({});
 }
+

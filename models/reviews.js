@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const { postReviewByPropertyId } = require("../controllers/reviews");
 
 exports.fetchReviewsByPropertyId = async (property_id) => {
     
@@ -24,15 +23,16 @@ exports.insertReview = async (property_id, guest_id, rating, comment) => {
         RETURNING review_id, property_id, guest_id, rating, comment, created_at;`,
         [property_id, guest_id, rating, comment]
     );
+
     return rows[0];
 };
-exports.deleteReviewbyId = async(review_id) => {
-    const { rows: review } = await db.query(
+exports.deleteReviewById = async(review_id) => {
+    const { rows } = await db.query(
         `DELETE FROM reviews 
         WHERE review_id = $1
         RETURNING *`,
         [review_id]
     );
-    return review;
-
+   
+    return rows;
 };

@@ -1,7 +1,7 @@
 const express = require("express")
 const { getProperties, getPropertyById } = require("./controllers/properties");
-const { getUsers } = require("./controllers/users");
-const { getReviewsByPropertyId, postReviewByPropertyId } = require("./controllers/reviews");
+//const { getUsers } = require("./controllers/users");
+const { getReviewsByPropertyId, postReviewByPropertyId, deleteReviewById } = require("./controllers/reviews");
 const { 
     handlePathNotFound, 
     handleBadRequests, 
@@ -21,13 +21,13 @@ app.get("/api/properties/:id/reviews", getReviewsByPropertyId);
 
 app.post("/api/properties/:id/reviews", postReviewByPropertyId);
 
-//app.delete("/api/properties/:id/reviews", deleteReviewByPropertyId);
+app.delete("/api/reviews/:id", deleteReviewById);
 
 //app.get("/api/users/:id/", getUsers);
 
+app.all("/*all", handlePathNotFound);
 
 
-app.use(handlePathNotFound);
 app.use(handleBadRequests);
 app.use(handleCustomsErrors);
 app.use(handleServerErrors);

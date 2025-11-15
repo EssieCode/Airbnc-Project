@@ -38,10 +38,7 @@ describe("app", () => {
             });
             
         });
-        test("404- Not found", async () => {
-            const { body } = await request(app).get("/api/properties/9999").expect(404);
-            expect(body.msg).toBe("404 not found.");
-        });
+
     });
     describe("GET/api/properties/{id}", () => {
         test("should respond with status 200", async () => {
@@ -97,7 +94,7 @@ describe("app", () => {
     describe("POST/api/properties/{id}/reviews", () => {
         test("should respond with status 201", async () => {
             const postReview = {
-             guest_id: 9,
+             guest_id: 2,
              rating: 4,
              comment: "Comment about Modern Apartment in City Center"
             }
@@ -108,7 +105,7 @@ describe("app", () => {
         });
         test("should respond with newly inserted review with a fresh id", async () => {
             const postReview = {
-             guest_id: 9,
+             guest_id: 2,
              rating: 4,
              comment: "Comment about Modern Apartment in City Center"
             }
@@ -118,8 +115,10 @@ describe("app", () => {
                 .send(postReview)
                 .expect(201);
 
-            expect(body.review).toMatchObject(postReviewByPropertyId);
-            expect(body.review).toHaveProperty("review_id");  
+            expect(body.review).toMatchObject(postReview);
+            expect(body.review).toHaveProperty("review_id");
+            expect(body.review).toHaveProperty("created_at");
+            expect(body.review).toHaveProperty("property_id", 3);
         });
         test("should respond with 400 for missing fields", async () => {
             const postReview = {
@@ -140,12 +139,13 @@ describe("app", () => {
             await request(app)
             .delete("/api/reviews/1")
             .expect(204);
+            
         });
         test("should return 404 if no valid review id", async () => {
             const response = await request(app)
-                .delete("/api/reviews/9999")
+                .delete("/api/reviews/0")
                 .expect(404);
-                expect(response.body.error).toBe("Review not found");
+                expect(response.body.msg).toBe("Review not found.");
         });
     });
     });

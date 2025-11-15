@@ -16,7 +16,7 @@ async function seed(property_types, users, properties, reviews) {
         );`);
     
     //create users table
-   await db.query(`CREATE TABLE users(
+    await db.query(`CREATE TABLE users(
         user_id SERIAL PRIMARY KEY,
         first_name VARCHAR(40) NOT NULL,
         surname VARCHAR(50) NOT NULL,
