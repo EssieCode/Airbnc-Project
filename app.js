@@ -9,8 +9,8 @@ const {
     handleServerErrors, 
  } = require("./errors.js");
 
-
 const app = express();
+
 
 app.use(cors());
 
