@@ -7,7 +7,9 @@ const {
     handleBadRequests, 
     handleCustomsErrors,
     handleServerErrors, 
- } = require("./errors.js")
+ } = require("./errors.js");
+ const cors = require('cors');
+ app.use(cors());
 
 const app = express();
 
@@ -31,5 +33,6 @@ app.all("/*all", handlePathNotFound);
 app.use(handleBadRequests);
 app.use(handleCustomsErrors);
 app.use(handleServerErrors);
+
 
 module.exports = app;
