@@ -1,6 +1,6 @@
 const express = require("express")
+const cors = require('cors');
 const { getProperties, getPropertyById } = require("./controllers/properties");
-//const { getUsers } = require("./controllers/users");
 const { getReviewsByPropertyId, postReviewByPropertyId, deleteReviewById } = require("./controllers/reviews");
 const { 
     handlePathNotFound, 
@@ -8,10 +8,11 @@ const {
     handleCustomsErrors,
     handleServerErrors, 
  } = require("./errors.js");
- const cors = require('cors');
- app.use(cors());
+
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -25,14 +26,14 @@ app.post("/api/properties/:id/reviews", postReviewByPropertyId);
 
 app.delete("/api/reviews/:id", deleteReviewById);
 
-//app.get("/api/users/:id/", getUsers);
-
-app.all("/*all", handlePathNotFound);
+app.all("/*", handlePathNotFound);
 
 
 app.use(handleBadRequests);
 app.use(handleCustomsErrors);
 app.use(handleServerErrors);
 
+const cors = require('cors');
+app.use(cors());
 
 module.exports = app;
