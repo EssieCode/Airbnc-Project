@@ -33,7 +33,5 @@ app.use(handleBadRequests);
 app.use(handleCustomsErrors);
 app.use(handleServerErrors);
 
-const cors = require('cors');
-app.use(cors());
 
 module.exports = app;
