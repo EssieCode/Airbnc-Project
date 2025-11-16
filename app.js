@@ -26,7 +26,7 @@ app.post("/api/properties/:id/reviews", postReviewByPropertyId);
 
 app.delete("/api/reviews/:id", deleteReviewById);
 
-app.all("/*", handlePathNotFound);
+app.all("/all", handlePathNotFound);
 
 
 app.use(handleBadRequests);
