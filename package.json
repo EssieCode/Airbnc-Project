@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EssieCode/Airbnc-Project.git"
+    "url": "git+https://github.com/Esther-FaBer/Airbnc-Project.git"
   },
   "keywords": [],
   "author": "",
@@ -23,9 +23,9 @@
   "devEngines": {},
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/EssieCode/Airbnc-Project/issues"
+    "url": "https://github.com/Esther-FaBer/Airbnc-Project/issues"
   },
-  "homepage": "https://github.com/EssieCode/Airbnc-Project#readme",
+  "homepage": "https://github.com/Esther-FaBer/Airbnc-Project#readme",
   "dependencies": {
     "@supabase/supabase-js": "^2.105.4",
     "cors": "^2.8.6",

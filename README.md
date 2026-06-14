@@ -19,7 +19,7 @@ The project uses Express for routing and middleware, PostgreSQL as the relationa
 
 1. Clone the repository:
 
-git clone https://github.com/your-username/airbnc.git
+git clone https://github.com/Esther-FaBer/Airbnc-Project.git
 cd airbnc
 
 2. Install dependencies:
