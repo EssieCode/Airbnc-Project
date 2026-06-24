@@ -18,14 +18,27 @@ exports.fetchReviewsByPropertyId = async (property_id) => {
 };
 
 exports.insertReview = async (property_id, guest_id, rating, comment) => {
-    const { rows } = await db.query (
-        `INSERT INTO reviews (property_id, guest_id, rating, comment) 
-        VALUES ($1, $2, $3, $4)
-        RETURNING review_id, property_id, guest_id, rating, comment, created_at;`,
-        [property_id, guest_id, rating, comment]
-    );
+  const { rows } = await db.query(
+    `INSERT INTO reviews (property_id, guest_id, rating, comment) 
+    VALUES ($1, $2, $3, $4)
+    RETURNING review_id`,
+    [property_id, guest_id, rating, comment]
+  );
 
-    return rows[0];
+  const review_id = rows[0].review_id;
+
+  // Second query --> full review with guest name and avatar
+  const { rows: fullReview } = await db.query(
+    `SELECT review_id, comment, rating, created_at,
+    CONCAT(first_name, ' ', surname) AS guest,
+    avatar
+    FROM reviews
+    JOIN users ON reviews.guest_id = users.user_id
+    WHERE review_id = $1`,
+    [review_id]
+  );
+
+  return fullReview[0];
 };
 
 exports.deleteReviewById = async(review_id) => {
